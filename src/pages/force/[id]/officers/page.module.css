@@ -12,18 +12,6 @@
 	text-align: center;
 }
 
-.description {
-	display: flex;
-	flex-direction: column;
-	justify-content: inherit;
-	align-items: inherit;
-	font-size: 0.85rem;
-	max-width: var(--max-width);
-	width: 100%;
-	z-index: 2;
-	font-family: var(--font-mono);
-}
-
 .description a {
 	display: flex;
 	justify-content: center;
@@ -58,37 +46,17 @@
 	cursor: pointer;
 }
 
-.socials {
-	display: flex;
-	justify-content: center;
-	align-items: flex-start;
-	gap: 5px;
-	height: 50px;
-}
-
-.socials div {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.socialLinks div {
-	transition: all 0.3s ease;
-}
-
-.socialLinks div:hover {
-	position: absolute;
-	width: 40px !important;
-	height: 40px !important;
-}
-
 .link {
 	color: #c4b29f;
 }
 
-.link:hover {
-	color: #f0db4f;
-	text-decoration: underline;
+.filterArea {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 1em;
 }
 
 .searchBar {
@@ -96,11 +64,11 @@
 	align-items: center;
 	justify-content: center;
 	gap: 0.5em;
-	width: 50%;
+	width: 100%;
 }
 
 .search {
-	width: 35%;
+	width: 17.5%;
 	border: none;
 	border-bottom: 1px solid #a47667;
 	padding: 5px;
@@ -122,10 +90,33 @@
 	text-align: center;
 }
 
+.rankFilter {
+	width: 30%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.rankFilter span {
+	text-align: center;
+}
+
+.rank {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.5em;
+	cursor: pointer;
+	gap: 0.5em;
+}
+
 @media (max-width: 700px) {
 	.search:focus {
 		caret-color: white;
 		border-bottom: 1px solid white;
+		width: 100%;
+	}
+	.rankFilter {
 		width: 100%;
 	}
 }
