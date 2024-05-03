@@ -1,8 +1,6 @@
-import { useState } from "react";
-import { SeniorOfficerPreview, SeniorOfficers, SpecificForce } from "@/functions/api-calls";
+import { SeniorOfficerPreview, SpecificForce } from "@/functions/api-calls";
 import Header from "@/components/layouts/header/header";
 import styles from "./page.module.css";
-import "@/app/globals.css";
 import { PoliceSocials } from "@/functions/police-socials";
 import { networkFor } from "react-social-icons";
 import { NextSeo } from "next-seo";
@@ -39,10 +37,6 @@ function socialCheck(url, index) {
 export default function Force({ force, seniorOfficers }) {
 	if (force.description) {
 		var descriptionWithoutTags = force.description.replace(/<[^>]+>/g, "");
-	}
-
-	if (!force) {
-		return <div>Loading...</div>;
 	}
 
 	return (
