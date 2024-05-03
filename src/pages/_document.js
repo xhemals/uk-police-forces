@@ -6,7 +6,7 @@ class MyDocument extends Document {
 		return (
 			<Html lang="en">
 				<Head>
-					<script async src="https://kit.fontawesome.com/c4b491e14f.js" crossorigin="anonymous"></script>
+					<script async src="https://kit.fontawesome.com/c4b491e14f.js" crossOrigin="anonymous"></script>
 				</Head>
 				<body>
 					<Main />
