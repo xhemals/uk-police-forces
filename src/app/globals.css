@@ -79,6 +79,10 @@ a {
 	text-decoration: none;
 }
 
+a:hover {
+	color: #f0db4f;
+}
+
 .hidden {
 	display: none;
 }
