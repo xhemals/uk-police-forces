@@ -1,6 +1,5 @@
 import React from "react";
-import RootLayout from "@/app/layout"; // adjust the import path as needed
-import { Scripts } from "@/components/head/head";
+import RootLayout from "@/app/layout";
 
 function MyApp({ Component, pageProps }) {
 	return (
