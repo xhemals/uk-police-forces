@@ -1,8 +1,15 @@
+// React and Next.js imports
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import styles from "@/app/page.module.css";
-import { useState } from "react";
+
+// Function imports
 import { GetForces } from "@/functions/api-calls";
+
+// Style imports
+import styles from "@/app/page.module.css";
+
+// Other imports
 import { NextSeo } from "next-seo";
 
 export async function getServerSideProps() {
