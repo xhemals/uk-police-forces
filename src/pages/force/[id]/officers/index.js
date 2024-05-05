@@ -1,13 +1,25 @@
+// React and Next.js imports
 import { useState } from "react";
-import { SeniorOfficers, SpecificForce } from "@/functions/api-calls";
+import Link from "next/link";
+import dynamic from "next/dynamic";
+import { NextSeo } from "next-seo";
+
+// Component imports
 import Header from "@/components/layouts/header/header";
+import { Table } from "ka-table";
+
+// Style imports
 import styles from "./page.module.css";
 import "@/components/filters/react-select.css";
-import { NextSeo } from "next-seo";
-import Link from "next/link";
-import makeAnimated from "react-select/animated";
-import dynamic from "next/dynamic";
+import "@/components/table/ka-table.css";
 
+// Function imports
+import { SeniorOfficers, SpecificForce, Neighbourhoods } from "@/functions/api-calls";
+
+// Other imports
+import { SortingMode } from "ka-table/enums";
+
+// Dynamic imports
 const Select = dynamic(() => import("react-select").then((mod) => mod.default), { ssr: false });
 
 export async function getServerSideProps({ params }) {
@@ -27,6 +39,15 @@ function getRankFilters(seniorOfficers) {
 	return options;
 }
 
+function tableData(visibleOfficers) {
+	const dataArray = visibleOfficers.map((officer, index) => ({
+		name: officer.name,
+		rank: officer.rank,
+		id: index,
+	}));
+	return dataArray;
+}
+
 export default function Force({ force, seniorOfficers }) {
 	const [visibleOfficers, setVisibleOfficers] = useState(seniorOfficers);
 
@@ -36,6 +57,15 @@ export default function Force({ force, seniorOfficers }) {
 			return;
 		}
 		setVisibleOfficers(seniorOfficers.filter((officer) => selectedOptions.some((option) => option.value === officer.rank)));
+	};
+
+	const CustomCell = ({ value, force }) => {
+		const officerUrl = value.replace(/ /g, "_").toLowerCase();
+		return (
+			<Link href={`/force/${force}/officers/${officerUrl}`}>
+				<div className="ka-url">{value}</div>
+			</Link>
+		);
 	};
 
 	return (
@@ -68,15 +98,28 @@ export default function Force({ force, seniorOfficers }) {
 									/>
 								</div>
 							</div>
-							<div className={`${styles.officersDisplay}`}>
-								{visibleOfficers.map((officer, index) => (
-									<div key={index} className={`officer ${styles.officer}`} name={officer.name}>
-										<h3>{officer.name}</h3>
-										<h6>{officer.rank}</h6>
-										{officer.bio ? <div className={styles.bio} dangerouslySetInnerHTML={{ __html: officer.bio }}></div> : null}
-									</div>
-								))}
-							</div>
+							<span>
+								{visibleOfficers.length} {visibleOfficers.length === 1 ? "officer" : "officers"} found
+							</span>
+							<Table
+								data={tableData(visibleOfficers)}
+								columns={[
+									{ key: "name", title: "Name" },
+									{ key: "rank", title: "Rank" },
+								]}
+								rowKeyField="id"
+								childComponents={{
+									cellText: {
+										content: (props) => {
+											switch (props.column.key) {
+												case "name":
+													return <CustomCell {...props} force={force.id} />;
+											}
+										},
+									},
+								}}
+								sortingMode={SortingMode.Single}
+							/>
 						</>
 					) : (
 						<h4>There are no senior officers listed for {force.name}</h4>
