@@ -1,16 +1,45 @@
-import { SeniorOfficerPreview, SpecificForce } from "@/functions/api-calls";
-import Header from "@/components/layouts/header/header";
-import styles from "./page.module.css";
-import { PoliceSocials } from "@/functions/police-socials";
-import { networkFor } from "react-social-icons";
-import { NextSeo } from "next-seo";
+// React and Next.js imports
+import { useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import { NextSeo } from "next-seo";
+
+// Component imports
+import Header from "@/components/layouts/header/header";
+import { Table } from "ka-table";
+
+// Style imports
+import styles from "./page.module.css";
+import "@/components/filters/react-select.css";
+import "@/components/table/ka-table.css";
+
+// Function imports
+import { SeniorOfficers, SpecificForce, Neighbourhoods } from "@/functions/api-calls";
+import { PoliceSocials } from "@/functions/police-socials";
+
+// Other imports
+import { networkFor } from "react-social-icons";
+import { SortingMode } from "ka-table/enums";
+
+// Dynamic imports
+const Select = dynamic(() => import("react-select").then((mod) => mod.default), { ssr: false });
 
 export async function getServerSideProps({ params }) {
 	const id = params.id;
 	const force = await SpecificForce(id);
-	const seniorOfficers = await SeniorOfficerPreview(id);
-	return { props: { force, seniorOfficers } };
+	const seniorOfficers = await SeniorOfficers(id);
+	const neighbourhoods = await Neighbourhoods(id);
+	return { props: { force, seniorOfficers, neighbourhoods } };
+}
+
+function getRankFilters(seniorOfficers) {
+	let options = [];
+	seniorOfficers.map((officer) => {
+		if (!options.some((option) => option.value === officer.rank)) {
+			options.push({ value: officer.rank, label: officer.rank });
+		}
+	});
+	return options;
 }
 
 function socialCheck(url, index) {
@@ -34,10 +63,38 @@ function socialCheck(url, index) {
 	);
 }
 
-export default function Force({ force, seniorOfficers }) {
+function tableData(visibleOfficers) {
+	const dataArray = visibleOfficers.map((officer, index) => ({
+		name: officer.name,
+		rank: officer.rank,
+		id: index,
+	}));
+	return dataArray;
+}
+
+export default function Force({ force, seniorOfficers, neighbourhoods }) {
+	const [visibleOfficers, setVisibleOfficers] = useState(seniorOfficers);
+
 	if (force.description) {
 		var descriptionWithoutTags = force.description.replace(/<[^>]+>/g, "");
 	}
+
+	const filterByRank = (selectedOptions) => {
+		if (selectedOptions.length === 0) {
+			setVisibleOfficers(seniorOfficers);
+			return;
+		}
+		setVisibleOfficers(seniorOfficers.filter((officer) => selectedOptions.some((option) => option.value === officer.rank)));
+	};
+
+	const CustomCell = ({ value, force }) => {
+		const officerUrl = value.replace(/ /g, "_").toLowerCase();
+		return (
+			<Link href={`/force/${force}/officers/${officerUrl}`}>
+				<div className="ka-url">{value}</div>
+			</Link>
+		);
+	};
 
 	return (
 		<>
@@ -56,19 +113,72 @@ export default function Force({ force, seniorOfficers }) {
 				</div>
 				{descriptionWithoutTags && descriptionWithoutTags != "Force  profile" ? <p>{descriptionWithoutTags}</p> : null}
 				<div className={styles.information}>
-					{seniorOfficers && seniorOfficers.length > 0 ? (
-						<div className={styles.seniorOfficers}>
-							<h2>Senior Officers</h2>
-							{seniorOfficers.map((officer, index) => (
-								<div key={index} className={`officer ${styles.officer}`} name={officer.name}>
-									<h3>{officer.name}</h3>
-									<div className={styles.officerLine}></div>
-									<p>{officer.rank}</p>
+					<div className={styles.seniorOfficers}>
+						{seniorOfficers && seniorOfficers.length > 0 ? (
+							<>
+								<h2>Senior Officers</h2>
+								<div className={styles.filterArea}>
+									<div className={styles.rankFilter}>
+										<span>
+											<h3>Rank</h3>
+										</span>
+										<Select
+											blurInputOnSelect
+											isMulti
+											options={getRankFilters(seniorOfficers)}
+											name="Rank"
+											unstyled
+											className="react-select-container"
+											classNamePrefix="react-select"
+											onChange={(selectedOptions) => {
+												filterByRank(selectedOptions);
+											}}
+										/>
+									</div>
+								</div>
+								<span>
+									{visibleOfficers.length} {visibleOfficers.length === 1 ? "officer" : "officers"} found
+								</span>
+								<Table
+									data={tableData(visibleOfficers)}
+									columns={[
+										{ key: "name", title: "Name" },
+										{ key: "rank", title: "Rank" },
+									]}
+									rowKeyField="id"
+									virtualScrolling={{
+										enabled: true,
+									}}
+									childComponents={{
+										tableWrapper: {
+											elementAttributes: () => ({
+												style: { maxHeight: 600 },
+											}),
+										},
+										cellText: {
+											content: (props) => {
+												switch (props.column.key) {
+													case "name":
+														return <CustomCell {...props} force={force.id} />;
+												}
+											},
+										},
+									}}
+									sortingMode={SortingMode.Single}
+								/>
+							</>
+						) : (
+							<h4>There are no senior officers listed for {force.name}</h4>
+						)}
+					</div>
+					{neighbourhoods && neighbourhoods.length > 0 ? (
+						<div className={styles.neighbourhoods}>
+							<h2>Neighbourhoods</h2>
+							{neighbourhoods.map((neighbourhood, index) => (
+								<div key={index} className={`neighbourhood ${styles.neighbourhood}`} name={neighbourhood.name}>
+									<h3>{neighbourhood.name}</h3>
 								</div>
 							))}
-							<Link href={`/force/${force.id}/officers`} className={styles.link}>
-								View all senior officers
-							</Link>
 						</div>
 					) : null}
 				</div>
