@@ -3,6 +3,11 @@
 	border-radius: var(--border-radius);
 }
 
+.react-select__control {
+	border: 1px solid rgb(var(--background-colour));
+	/* border-radius: var(--border-radius); */
+}
+
 .react-select-container:focus-within {
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;
@@ -32,10 +37,11 @@
 }
 
 .react-select__menu {
-	border-top: 1px solid black;
+	border: 1px solid rgb(var(--background-colour));
 	background-color: rgb(var(--callout-border-rgb));
 	border-bottom-left-radius: var(--border-radius);
 	border-bottom-right-radius: var(--border-radius);
+	box-shadow: 8px 10px 8px 0px rgba(0, 0, 0, 0.8);
 }
 
 .react-select__menu-list {
