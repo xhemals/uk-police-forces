@@ -14,7 +14,7 @@ import "@/components/filters/react-select.css";
 import "@/components/table/ka-table.css";
 
 // Function imports
-import { SeniorOfficers, SpecificForce, Neighbourhoods } from "@/functions/api-calls";
+import { SeniorOfficers, SpecificForce, Neighbourhoods } from "@/functions/data-calls";
 import { PoliceSocials } from "@/functions/police-socials";
 
 // Other imports
@@ -113,10 +113,20 @@ export default function Force({ force, seniorOfficers, neighbourhoods }) {
 				</div>
 				{descriptionWithoutTags && descriptionWithoutTags != "Force  profile" ? <p>{descriptionWithoutTags}</p> : null}
 				<div className={styles.information}>
+					{neighbourhoods && neighbourhoods.length > 0 ? (
+						<div className={styles.neighbourhoods}>
+							<h2>Neighbourhoods</h2>
+							{neighbourhoods.map((neighbourhood, index) => (
+								<div key={index} className={`neighbourhood ${styles.neighbourhood}`} name={neighbourhood.name}>
+									<h3>{neighbourhood.name}</h3>
+								</div>
+							))}
+						</div>
+					) : null}
 					<div className={styles.seniorOfficers}>
+						<h2>Senior Officers</h2>
 						{seniorOfficers && seniorOfficers.length > 0 ? (
 							<>
-								<h2>Senior Officers</h2>
 								<div className={styles.filterArea}>
 									<div className={styles.rankFilter}>
 										<span>
@@ -171,16 +181,6 @@ export default function Force({ force, seniorOfficers, neighbourhoods }) {
 							<h4>There are no senior officers listed for {force.name}</h4>
 						)}
 					</div>
-					{neighbourhoods && neighbourhoods.length > 0 ? (
-						<div className={styles.neighbourhoods}>
-							<h2>Neighbourhoods</h2>
-							{neighbourhoods.map((neighbourhood, index) => (
-								<div key={index} className={`neighbourhood ${styles.neighbourhood}`} name={neighbourhood.name}>
-									<h3>{neighbourhood.name}</h3>
-								</div>
-							))}
-						</div>
-					) : null}
 				</div>
 			</main>
 		</>
