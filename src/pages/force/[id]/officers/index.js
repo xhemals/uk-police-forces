@@ -14,7 +14,7 @@ import "@/components/filters/react-select.css";
 import "@/components/table/ka-table.css";
 
 // Function imports
-import { SeniorOfficers, SpecificForce, Neighbourhoods } from "@/functions/api-calls";
+import { SeniorOfficers, SpecificForce } from "@/functions/data-calls";
 
 // Other imports
 import { SortingMode } from "ka-table/enums";
