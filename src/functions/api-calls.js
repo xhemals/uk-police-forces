@@ -25,3 +25,13 @@ export const Neighbourhoods = async (id) => {
 	const response = await axios.get(`https://data.police.uk/api/${id}/neighbourhoods`);
 	return response.data;
 };
+
+export const SpecificNeighbourhood = async (id, neighbourhoodId) => {
+	const response = await axios.get(`https://data.police.uk/api/${id}/${neighbourhoodId}`);
+	return response.data;
+};
+
+export const NeighbourhoodTeam = async (id, neighbourhoodId) => {
+	const response = await axios.get(`https://data.police.uk/api/${id}/${neighbourhoodId}/people`);
+	return response.data;
+};
