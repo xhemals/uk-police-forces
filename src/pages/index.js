@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 // Function imports
-import { GetForces } from "@/functions/api-calls";
+import { GetForces } from "@/functions/data-calls";
 
 // Style imports
 import styles from "@/app/page.module.css";
@@ -38,7 +38,7 @@ export default function Home({ forces }) {
 					</div>
 					<div className={styles.forcesList}>
 						{visibleForces.map((force) => (
-							<Link href={`/force/${force.id}`} className={`force ${styles.force}`} key={force.id}>
+							<Link href={`/force/${force._id}`} className={`force ${styles.force}`} key={force._id}>
 								{force.name}
 							</Link>
 						))}
