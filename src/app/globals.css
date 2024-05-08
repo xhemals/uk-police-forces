@@ -55,6 +55,11 @@
   }
 } */
 
+#__next {
+	position: relative;
+	min-height: 100vh;
+}
+
 * {
 	box-sizing: border-box;
 	padding: 0;
@@ -74,6 +79,7 @@ main {
 
 body {
 	background: rgb(var(--background-colour));
+	min-height: 100vh;
 }
 
 a {
