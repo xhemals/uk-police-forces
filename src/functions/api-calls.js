@@ -1,5 +1,10 @@
 import axios from "axios";
 
+export const GetLastUpdated = async () => {
+	const response = await axios.get("https://data.police.uk/api/crime-last-updated");
+	return response.data;
+};
+
 export const GetForces = async () => {
 	const response = await axios.get("https://data.police.uk/api/forces");
 	return response.data;
