@@ -1,4 +1,5 @@
-import { GetForces, SeniorOfficers, SpecificForce, Neighbourhoods, specificNeighbourhood } from "@/functions/api-calls";
+import { GetForces, SeniorOfficers, SpecificForce, Neighbourhoods, specificNeighbourhood, GetLastUpdated } from "@/functions/api-calls";
+import { DbLastUpdated } from "@/functions/data-calls";
 import { MongoClient, ServerApiVersion } from "mongodb";
 import Bottleneck from "bottleneck";
 
@@ -25,8 +26,24 @@ export default async function handler(req, res) {
 	try {
 		await client.connect();
 
-		const database = client.db("data"); // Replace with your database name
-		const collection = database.collection("forces"); // Replace with your collection name
+		const database = client.db("data");
+		const forceCollection = database.collection("forces");
+		const datesCollection = database.collection("dates");
+
+		const lastUpdated = await DbLastUpdated();
+		const APILastUpdated = await limiter.schedule(() => GetLastUpdated());
+		const APILastUpdatedDate = new Date(APILastUpdated.date);
+		if (lastUpdated !== null) {
+			const lastUpdatedDate = new Date(lastUpdated.date);
+
+			if (lastUpdatedDate.getTime() === APILastUpdatedDate.getTime()) {
+				console.log("Database is up to date");
+				res.status(200).json({ status: "Database is up to date" });
+				return;
+			}
+		}
+
+		await datesCollection.updateOne({ _id: "APILastUpdate" }, { $set: { date: APILastUpdatedDate } }, { upsert: true });
 
 		// MongoDB creates a new collection if it doesn't exist
 		for (let i = 0; i < forces.length; i++) {
@@ -37,7 +54,7 @@ export default async function handler(req, res) {
 			const seniorOfficers = await getSeniorOfficers(force);
 			const neighbourhoods = await getNeighbourhoods(force);
 			// Await the updateOne operation
-			await collection.updateOne(
+			await forceCollection.updateOne(
 				{ _id: force.id }, // Filter
 				{
 					$set: {
@@ -58,10 +75,6 @@ export default async function handler(req, res) {
 				{ upsert: true } // Options
 			);
 			console.timeEnd(force.name + " update time");
-			// console.log(`${force.name} updated in `);
-
-			// Wait for half a second before the next request
-			// await new Promise((resolve) => setTimeout(resolve, 500));
 		}
 
 		res.status(200).json({ status: "Success" });
