@@ -5,7 +5,6 @@ import dynamic from "next/dynamic";
 import { NextSeo } from "next-seo";
 
 // Component imports
-import Header from "@/components/layouts/header/header";
 import { Table } from "ka-table";
 
 // Style imports
@@ -99,7 +98,6 @@ export default function Force({ force, seniorOfficers, neighbourhoods }) {
 	return (
 		<>
 			<NextSeo title={force.name} description={descriptionWithoutTags ? descriptionWithoutTags : `Information about ${force.name}`} />
-			<Header />
 			<main className={styles.main}>
 				<h1>{force.name}</h1>
 
@@ -111,7 +109,7 @@ export default function Force({ force, seniorOfficers, neighbourhoods }) {
 						return socialCheck(method.url, index);
 					})}
 				</div>
-				{descriptionWithoutTags && descriptionWithoutTags != "Force  profile" ? <p>{descriptionWithoutTags}</p> : null}
+				{descriptionWithoutTags && descriptionWithoutTags != "Force  profile" ? <div className={styles.forceDescription}>{descriptionWithoutTags}</div> : null}
 				<div className={styles.information}>
 					{neighbourhoods && neighbourhoods.length > 0 ? (
 						<div className={styles.neighbourhoods}>

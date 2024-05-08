@@ -58,6 +58,10 @@
 	cursor: pointer;
 }
 
+.forceDescription {
+	text-align: left;
+}
+
 .socials {
 	display: flex;
 	justify-content: center;
