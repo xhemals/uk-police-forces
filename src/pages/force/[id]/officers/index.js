@@ -5,7 +5,6 @@ import dynamic from "next/dynamic";
 import { NextSeo } from "next-seo";
 
 // Component imports
-import Header from "@/components/layouts/header/header";
 import { Table } from "ka-table";
 
 // Style imports
@@ -71,7 +70,6 @@ export default function Force({ force, seniorOfficers }) {
 	return (
 		<>
 			<NextSeo title={`Officers - ${force.name}`} description={`Senior officers from ${force.name}`} />
-			<Header />
 			<main className={styles.main}>
 				<h1>
 					<Link href={`/force/${force.id}`}>{force.name}</Link> Senior Officers
