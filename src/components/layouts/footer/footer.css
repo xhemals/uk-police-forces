@@ -1,0 +1,32 @@
+footer {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	gap: 1rem;
+	width: 100%;
+	border-top: 1px solid rgba(var(--callout-border-rgb), 0.3);
+	margin: auto;
+	padding: 1rem 0;
+	font-size: 12px;
+	position: absolute;
+	bottom: 0;
+}
+
+.row-1 {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.disclaimer {
+	font-size: 12px;
+}
+
+.disclaimer a {
+	color: #f0db4f;
+}
+
+.disclaimer a:hover {
+	text-decoration: underline;
+}
