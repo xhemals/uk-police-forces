@@ -24,12 +24,6 @@ export default async function handler(req, res) {
 	});
 
 	try {
-		await client.connect();
-
-		const database = client.db("data");
-		const forceCollection = database.collection("forces");
-		const datesCollection = database.collection("dates");
-
 		const lastUpdated = await DbLastUpdated();
 		const APILastUpdated = await limiter.schedule(() => GetLastUpdated());
 		const APILastUpdatedDate = new Date(APILastUpdated.date);
@@ -37,11 +31,16 @@ export default async function handler(req, res) {
 			const lastUpdatedDate = new Date(lastUpdated.date);
 
 			if (lastUpdatedDate.getTime() === APILastUpdatedDate.getTime()) {
-				console.log("Database is up to date");
 				res.status(200).json({ status: "Database is up to date" });
 				return;
 			}
 		}
+
+		await client.connect();
+
+		const database = client.db("data");
+		const forceCollection = database.collection("forces");
+		const datesCollection = database.collection("dates");
 
 		await datesCollection.updateOne({ _id: "APILastUpdate" }, { $set: { date: APILastUpdatedDate } }, { upsert: true });
 
@@ -59,7 +58,7 @@ export default async function handler(req, res) {
 				{
 					$set: {
 						name: force.name,
-						pageUrl: `/force/${force.id}`,
+						pageUrl: `/force/${encodeURIComponent(force.id)}`,
 						info: {
 							description: forceInfo.description,
 							url: forceInfo.url,
@@ -68,7 +67,7 @@ export default async function handler(req, res) {
 							id: forceInfo.id,
 							name: forceInfo.name,
 						},
-						seniorOfficers: { pageUrl: `/force/${force.id}/officers`, officers: seniorOfficers },
+						seniorOfficers: { pageUrl: `/force/${encodeURIComponent(force.id)}/officers`, officers: seniorOfficers },
 						neighbourhoods: neighbourhoods,
 					},
 				}, // Update
@@ -97,7 +96,7 @@ async function getSeniorOfficers(force) {
 	console.log(`   ↳${force.name} senior officers updating...`);
 	const officers = await limiter.schedule(() => SeniorOfficers(force.id));
 	officers.map((officer) => {
-		officer.pageUrl = `/force/${force.id}/officers/${officer.name.replace(/ /g, "_").toLowerCase()}`;
+		officer.pageUrl = `/force/${force.id}/officers/${encodeURIComponent(officer.name.replace(/ /g, "_").toLowerCase())}`;
 	});
 	console.log(`       ↳ ✓ Complete`);
 	return officers;
@@ -107,7 +106,7 @@ async function getNeighbourhoods(force) {
 	console.log(`   ↳${force.name} neighbourhoods updating...`);
 	const neighbourhoods = await limiter.schedule(() => Neighbourhoods(force.id));
 	neighbourhoods.map(async (neighbourhood) => {
-		neighbourhood.pageUrl = `/force/${force.id}/neighbourhoods/${neighbourhood.id}`;
+		neighbourhood.pageUrl = `/force/${force.id}/neighbourhoods/${encodeURIComponent(neighbourhood.id.replace(/ /g, "_"))}`;
 	});
 	console.log(`       ↳ ✓ Complete`);
 	return neighbourhoods;
