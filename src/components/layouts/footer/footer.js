@@ -13,7 +13,7 @@ export default function Footer({ lastUpdated }) {
 				<div className="last-updated">Last updated {lastUpdatedFormatted}</div>
 			</div>
 			<div className="row-2">
-				<div class="disclaimer">
+				<div className="disclaimer">
 					<p>
 						Disclaimer: This website is an independent service and is not affiliated with, endorsed by, or in any way associated with the UK Police Force. <Link href="/disclaimer">Read more.</Link>
 					</p>
