@@ -14,16 +14,21 @@
 		"axios-cache-interceptor": "^1.5.2",
 		"bottleneck": "^2.19.5",
 		"dotenv": "^16.4.5",
+		"html-entities": "^2.5.2",
 		"isomorphic-dompurify": "^2.9.0",
 		"ka-table": "^9.0.0",
+		"leaflet": "^1.9.4",
+		"leaflet-omnivore": "^0.3.4",
 		"mongodb": "^6.6.0",
 		"next": "14.2.3",
 		"next-seo": "^6.5.0",
 		"next-sitemap": "^4.2.3",
 		"react": "^18",
 		"react-dom": "^18",
+		"react-leaflet": "^4.2.1",
 		"react-select": "^5.8.0",
-		"react-social-icons": "^6.16.0"
+		"react-social-icons": "^6.16.0",
+		"tinycolor2": "^1.6.0"
 	},
 	"devDependencies": {
 		"eslint": "^8",
