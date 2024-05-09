@@ -92,10 +92,10 @@
 
 .information {
 	display: flex;
-	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	gap: 1em;
+	flex-wrap: wrap;
+	gap: 5em;
 	width: 90%;
 }
 
@@ -109,7 +109,7 @@
 }
 
 .rankFilter {
-	width: 30%;
+	width: 75%;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -135,13 +135,40 @@
 	}
 }
 
+.neighbourhoods,
+.seniorOfficers {
+	width: 45%;
+}
+
+@media (max-width: 1200px) {
+	.neighbourhoods,
+	.seniorOfficers {
+		width: 100%;
+	}
+	.neighbourhoods {
+		gap: 1em;
+	}
+}
+
+@media (min-width: 1200px) {
+	.neighbourhoods {
+		gap: 129px;
+	}
+}
+
+.neighbourhoods {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
 .seniorOfficers {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	gap: 1em;
-	width: 100%;
 }
 
 .officer {

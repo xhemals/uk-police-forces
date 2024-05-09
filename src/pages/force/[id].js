@@ -19,6 +19,7 @@ import { PoliceSocials } from "@/functions/police-socials";
 // Other imports
 import { networkFor } from "react-social-icons";
 import { SortingMode } from "ka-table/enums";
+import { decode } from "html-entities";
 
 // Dynamic imports
 const Select = dynamic(() => import("react-select").then((mod) => mod.default), { ssr: false });
@@ -62,11 +63,19 @@ function socialCheck(url, index) {
 	);
 }
 
-function tableData(visibleOfficers) {
+function officersTable(visibleOfficers) {
 	const dataArray = visibleOfficers.map((officer, index) => ({
 		name: officer.name,
 		rank: officer.rank,
 		id: index,
+	}));
+	return dataArray;
+}
+
+function neighbourhoodsTable(neighbourhoods) {
+	const dataArray = neighbourhoods.map((neighbourhood, index) => ({
+		name: neighbourhood.name,
+		id: neighbourhood.id,
 	}));
 	return dataArray;
 }
@@ -86,11 +95,21 @@ export default function Force({ force, seniorOfficers, neighbourhoods }) {
 		setVisibleOfficers(seniorOfficers.filter((officer) => selectedOptions.some((option) => option.value === officer.rank)));
 	};
 
-	const CustomCell = ({ value, force }) => {
+	const OfficersCustomCell = ({ value, force }) => {
 		const officerUrl = value.replace(/ /g, "_").toLowerCase();
 		return (
 			<Link href={`/force/${force}/officers/${officerUrl}`}>
 				<div className="ka-url">{value}</div>
+			</Link>
+		);
+	};
+
+	const NeighbourhoodCustomCell = (props) => {
+		const { rowData, force } = props;
+		const decodedName = decode(rowData.name); // double decode, once here and once in return
+		return (
+			<Link href={`/force/${force}/neighbourhoods/${rowData.id.replace(/ /g, "_")}`}>
+				<div className="ka-url">{decode(decodedName)}</div>
 			</Link>
 		);
 	};
@@ -114,11 +133,27 @@ export default function Force({ force, seniorOfficers, neighbourhoods }) {
 					{neighbourhoods && neighbourhoods.length > 0 ? (
 						<div className={styles.neighbourhoods}>
 							<h2>Neighbourhoods</h2>
-							{neighbourhoods.map((neighbourhood, index) => (
-								<div key={index} className={`neighbourhood ${styles.neighbourhood}`} name={neighbourhood.name}>
-									<h3>{neighbourhood.name}</h3>
-								</div>
-							))}
+							<Table
+								data={neighbourhoodsTable(neighbourhoods)}
+								columns={[{ key: "name", title: "Name" }]}
+								rowKeyField="id"
+								childComponents={{
+									tableWrapper: {
+										elementAttributes: () => ({
+											style: { maxHeight: 600 },
+										}),
+									},
+									cellText: {
+										content: (props) => {
+											switch (props.column.key) {
+												case "name":
+													return <NeighbourhoodCustomCell {...props} force={force.id} />;
+											}
+										},
+									},
+								}}
+								sortingMode={SortingMode.Single}
+							/>
 						</div>
 					) : null}
 					<div className={styles.seniorOfficers}>
@@ -148,15 +183,12 @@ export default function Force({ force, seniorOfficers, neighbourhoods }) {
 									{visibleOfficers.length} {visibleOfficers.length === 1 ? "officer" : "officers"} found
 								</span>
 								<Table
-									data={tableData(visibleOfficers)}
+									data={officersTable(visibleOfficers)}
 									columns={[
 										{ key: "name", title: "Name" },
 										{ key: "rank", title: "Rank" },
 									]}
 									rowKeyField="id"
-									virtualScrolling={{
-										enabled: true,
-									}}
 									childComponents={{
 										tableWrapper: {
 											elementAttributes: () => ({
@@ -167,7 +199,7 @@ export default function Force({ force, seniorOfficers, neighbourhoods }) {
 											content: (props) => {
 												switch (props.column.key) {
 													case "name":
-														return <CustomCell {...props} force={force.id} />;
+														return <OfficersCustomCell {...props} force={force.id} />;
 												}
 											},
 										},
