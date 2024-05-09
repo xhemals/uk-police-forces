@@ -131,6 +131,16 @@
 	}
 }
 
+.table {
+	width: 50%;
+}
+
+@media (max-width: 1200px) {
+	.table {
+		width: 100%;
+	}
+}
+
 .seniorOfficers {
 	display: flex;
 	flex-direction: column;

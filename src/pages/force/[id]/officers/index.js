@@ -82,6 +82,7 @@ export default function Force({ force, seniorOfficers }) {
 									<span>
 										<h3>Rank</h3>
 									</span>
+
 									<Select
 										blurInputOnSelect
 										isMulti
@@ -99,25 +100,27 @@ export default function Force({ force, seniorOfficers }) {
 							<span>
 								{visibleOfficers.length} {visibleOfficers.length === 1 ? "officer" : "officers"} found
 							</span>
-							<Table
-								data={tableData(visibleOfficers)}
-								columns={[
-									{ key: "name", title: "Name" },
-									{ key: "rank", title: "Rank" },
-								]}
-								rowKeyField="id"
-								childComponents={{
-									cellText: {
-										content: (props) => {
-											switch (props.column.key) {
-												case "name":
-													return <CustomCell {...props} force={force.id} />;
-											}
+							<div className={styles.table}>
+								<Table
+									data={tableData(visibleOfficers)}
+									columns={[
+										{ key: "name", title: "Name" },
+										{ key: "rank", title: "Rank" },
+									]}
+									rowKeyField="id"
+									childComponents={{
+										cellText: {
+											content: (props) => {
+												switch (props.column.key) {
+													case "name":
+														return <CustomCell {...props} force={force.id} />;
+												}
+											},
 										},
-									},
-								}}
-								sortingMode={SortingMode.Single}
-							/>
+									}}
+									sortingMode={SortingMode.Single}
+								/>
+							</div>
 						</>
 					) : (
 						<h4>There are no senior officers listed for {force.name}</h4>
