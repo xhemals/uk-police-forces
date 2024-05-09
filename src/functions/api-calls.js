@@ -40,3 +40,12 @@ export const NeighbourhoodTeam = async (id, neighbourhoodId) => {
 	const response = await axios.get(`https://data.police.uk/api/${id}/${neighbourhoodId}/people`);
 	return response.data;
 };
+
+export const NeighbourhoodBoundary = async (id, neighbourhoodId) => {
+	const response = await axios.get(`https://data.police.uk/api/${id}/${neighbourhoodId}/boundary`);
+	const boundaries = [];
+	response.data.map((boundary) => {
+		boundaries.push([boundary.latitude, boundary.longitude]);
+	});
+	return boundaries;
+};
