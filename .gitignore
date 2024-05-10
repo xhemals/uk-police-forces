@@ -40,5 +40,15 @@ next-env.d.ts
 sitemap*.xml
 robots.txt
 
+##### BIG MAP #####
 #kml - Will maybe remove later ??
 *.kml
+
+#api
+src/pages/api/kmls/*
+
+#component
+MapComponent.js
+
+#Big map page
+big-map.js
