@@ -74,7 +74,7 @@ body {
 }
 
 main {
-	padding: 6rem 2rem;
+	padding: 1rem 2rem 9rem 2rem;
 }
 
 body {
@@ -101,21 +101,21 @@ a:hover {
 	}
 }
 
-@media (min-width: 600px) {
+/* @media (min-width: 600px) {
 	main {
 		padding: 6rem 4rem;
 	}
-}
+} */
 
-@media (min-width: 900px) {
+@media (min-width: 600px) {
 	main {
-		padding: 6rem 4rem;
+		padding: 1rem 4rem 8rem 4rem;
 	}
 }
 
 @media (min-width: 1200px) {
 	main {
-		padding: 6rem;
+		padding: 1rem 6rem 8rem 6rem;
 	}
 }
 
