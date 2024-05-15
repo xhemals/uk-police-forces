@@ -49,3 +49,13 @@ export const NeighbourhoodBoundary = async (id, neighbourhoodId) => {
 	});
 	return boundaries;
 };
+
+export const NeighbourhoodEvents = async (id, neighbourhoodId) => {
+	const response = await axios.get(`https://data.police.uk/api/${id}/${neighbourhoodId}/events`);
+	return response.data;
+};
+
+export const NeighbourhoodPriorities = async (id, neighbourhoodId) => {
+	const response = await axios.get(`https://data.police.uk/api/${id}/${neighbourhoodId}/priorities`);
+	return response.data;
+};
