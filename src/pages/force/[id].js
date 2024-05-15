@@ -56,7 +56,7 @@ function socialCheck(url, index) {
 	}
 	return (
 		<div key={index} className={styles.socialLinks}>
-			<a href={url} target="_blank" rel="noreferrer">
+			<a href={url} target="_blank" rel="nofollow">
 				<PoliceSocials socialUrl={url} />
 			</a>
 		</div>
@@ -117,10 +117,12 @@ export default function Force({ force, seniorOfficers, neighbourhoods }) {
 	return (
 		<>
 			<NextSeo title={force.name} description={descriptionWithoutTags ? descriptionWithoutTags : `Information about ${force.name}`} />
+			<NextSeo openGraph={{ images: [{ url: `/api/og?title=${encodeURIComponent(force.name)}`, alt: "UK Police Force Information Logo" }] }} />
+
 			<main className={styles.main}>
 				<h1>{force.name}</h1>
 
-				<a className={styles.link} href={force.url} target="_blank" rel="noreferrer">
+				<a className={styles.link} href={force.url} target="_blank" rel="nofollow">
 					{force.url}
 				</a>
 				<div className={styles.socials}>
