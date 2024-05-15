@@ -1,12 +1,10 @@
 header {
 	display: flex;
 	align-items: center;
-	width: 95%;
-	height: 50px;
-	border-bottom: 1px solid rgba(var(--callout-border-rgb), 0.3);
+	justify-content: center;
 	margin: auto;
 }
 
-header a {
-	padding: 1rem;
+header img {
+	margin-top: 1rem;
 }
