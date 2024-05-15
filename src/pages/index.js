@@ -28,7 +28,8 @@ export default function Home({ forces }) {
 
 	return (
 		<>
-			<NextSeo title="Police Forces" description="A list of all police forces in the UK" />
+			<NextSeo title="UK Police Force Information" description="Discover comprehensive profiles of all police forces across the United Kingdom, including key contact details and personnel information." />
+			<NextSeo openGraph={{ images: [{ url: `/api/og?title=Police%20Forces`, alt: "UK Police Force Information Logo" }] }} />
 			<main className={styles.main}>
 				<div className={styles.description}>
 					<h1>Police Forces</h1>
