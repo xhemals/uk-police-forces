@@ -16,7 +16,7 @@ function MapBoundary({ boundary }) {
 
 	return (
 		<MapContainer bounds={bounds} style={{ height: "400px", width: "400px" }}>
-			<TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' />
+			<TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; <a href="http://osm.org/copyright" rel="nofollow">OpenStreetMap</a> contributors' />
 			<Polygon pathOptions={{ color: "blue" }} positions={boundary} />
 		</MapContainer>
 	);
