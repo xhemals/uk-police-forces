@@ -30,10 +30,10 @@ export async function getServerSideProps({ params }) {
 }
 
 export default function Force({ officerName, officerInfo, force }) {
-	const cleanBio = DOMPurify.sanitize(officerInfo.bio);
 	return (
 		<>
 			<NextSeo title={`${officerName} - ${force.name}`} description={officerInfo.bio ? officerInfo.bio.replace(/<[^>]*>/g, "") : `Information about ${officerName} from ${force.name}`} />
+			<NextSeo openGraph={{ images: [{ url: `/api/og?title=${encodeURIComponent(force.name)}%20Officer:%20${encodeURIComponent(officerName)}`, alt: "UK Police Force Information Logo" }] }} />
 			<main className={styles.main}>
 				<h1>{officerName}</h1>
 				<h3>

@@ -70,6 +70,7 @@ export default function Force({ force, seniorOfficers }) {
 	return (
 		<>
 			<NextSeo title={`Officers - ${force.name}`} description={`Senior officers from ${force.name}`} />
+			<NextSeo openGraph={{ images: [{ url: `/api/og?title=${encodeURIComponent(force.name)}%20Officers`, alt: "UK Police Force Information Logo" }] }} />
 			<main className={styles.main}>
 				<h1>
 					<Link href={`/force/${force.id}`}>{force.name}</Link> Senior Officers
