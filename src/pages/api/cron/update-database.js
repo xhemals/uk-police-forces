@@ -3,8 +3,6 @@ import { DbLastUpdated } from "@/functions/data-calls";
 import { MongoClient, ServerApiVersion } from "mongodb";
 import Bottleneck from "bottleneck";
 
-export const maxDuration = 60;
-
 // Create a limiter instance
 const limiter = new Bottleneck({
 	minTime: 67,
@@ -13,7 +11,26 @@ const limiter = new Bottleneck({
 
 const forces = await GetForces();
 
+let taskStatus = {};
+
 export default async function handler(req, res) {
+	const authHeader = req.headers["authorization"];
+	if (!process.env.CRON_SECRET || authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+		return res.status(401).json({ success: false });
+	}
+	const taskId = req.query.taskId;
+	// The client is starting a new task
+	const newTaskId = Date.now().toString();
+	taskStatus[newTaskId] = "running";
+
+	// Start the long-running task in a separate process or thread
+	startLongRunningTask(newTaskId);
+
+	// Immediately send a response to the client
+	res.status(200).json({ taskId: newTaskId });
+}
+
+async function startLongRunningTask(taskId) {
 	const uri = process.env.MONGODB_URI;
 
 	// Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -33,7 +50,7 @@ export default async function handler(req, res) {
 			const lastUpdatedDate = new Date(lastUpdated.date);
 
 			if (lastUpdatedDate.getTime() === APILastUpdatedDate.getTime()) {
-				res.status(200).json({ status: "Database is up to date" });
+				console.log("Database is already up to date");
 				return;
 			}
 		}
@@ -78,14 +95,18 @@ export default async function handler(req, res) {
 			console.timeEnd(force.name + " update time");
 		}
 
-		res.status(200).json({ status: "Success" });
+		return (taskStatus[taskId] = "completed");
 	} catch (error) {
 		console.error(error);
-		res.status(500).json({ status: "Error", message: error.message });
+		return;
 	} finally {
 		await client.close();
 	}
 }
+
+// export default async function handler(req, res) {
+
+// }
 
 async function getSpecificForceInfo(force) {
 	console.log(`   ↳${force.name} info updating...`);
