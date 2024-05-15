@@ -47,6 +47,7 @@ export default function Force({ force, neighbourhoods }) {
 	return (
 		<>
 			<NextSeo title={`Neighbourhoods - ${force.name}`} description={`Neighbourhoods covered by ${force.name}`} />
+			<NextSeo openGraph={{ images: [{ url: `/api/og?title=${encodeURIComponent(force.name)}%20Neighbourhoods`, alt: "UK Police Force Information Logo" }] }} />
 			<main className={styles.main}>
 				<h1>
 					<Link href={`/force/${force.id}`}>{force.name}</Link> Neighbourhoods
