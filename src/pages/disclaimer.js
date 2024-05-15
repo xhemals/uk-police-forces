@@ -12,6 +12,7 @@ export default function Disclaimer({ lastUpdated }) {
 	return (
 		<>
 			<NextSeo title="Disclaimer" />
+			<NextSeo openGraph={{ images: [{ url: `/api/og?title=Disclaimer`, alt: "UK Police Force Information Logo" }] }} />
 			<main className={styles.main}>
 				<h1>Disclaimer</h1>
 				<div className={styles.disclaimer}>
