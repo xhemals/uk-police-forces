@@ -3,6 +3,8 @@ import { DbLastUpdated } from "@/functions/data-calls";
 import { MongoClient, ServerApiVersion } from "mongodb";
 import Bottleneck from "bottleneck";
 
+export const maxDuration = 60;
+
 // Create a limiter instance
 const limiter = new Bottleneck({
 	minTime: 67,
